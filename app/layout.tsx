@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Provider from "@/components/Provider";
+import NotificationPannel from "@/components/ui/notification-pannel/NotificationPannel";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider>{children}</Provider>
+        <Provider>
+          <NotificationPannel></NotificationPannel>
+          {children}
+        </Provider>
       </body>
     </html>
   );
