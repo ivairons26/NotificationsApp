@@ -4,8 +4,9 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { SubmitHandler, useForm } from "react-hook-form";
 import "./styles.css";
 import NotificationTypeSelect from "../notification-type-select/NotificationTypeSelect";
+import { trpc } from "@/server/client";
 
-type FormFields = {
+export type FormFields = {
   type: string;
   name?: string;
   releaseNumber?: number;
@@ -14,14 +15,27 @@ type FormFields = {
 const AddNotificationDialog = () => {
   const [selectedValue, setSelectedValue] = useState<string>("");
 
-  const { register, handleSubmit } = useForm<FormFields>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormFields>();
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
+    // TODO add notification to the DB with all properties
+    addNotification.mutate({ type: data.type });
   };
 
   const onChangeCallback = (change: string) => {
     setSelectedValue(change);
+    setValue(type.name, change);
   };
+
+  const addNotification = trpc.notification.addNotification.useMutation({
+    onSettled: () => {
+      // TODO add notification to the top of the pannel
+    },
+  });
 
   const Item = ({ type }: { type: string }) => {
     switch (type) {
@@ -34,11 +48,14 @@ const AddNotificationDialog = () => {
               Name
             </label>
             <input
-              {...register("name")}
+              {...register("name", { required: "required" })}
               type="text"
               className="Input"
               id="name"
             />
+            {errors.name && (
+              <div className="text-red-500">{errors.name.message}</div>
+            )}
           </fieldset>
         );
       case "update":
@@ -48,17 +65,22 @@ const AddNotificationDialog = () => {
               Release number
             </label>
             <input
-              {...register("releaseNumber")}
+              {...register("releaseNumber", { required: "required" })}
               type="number"
               className="Input"
               id="releasenumber"
             />
+            {errors.releaseNumber && (
+              <div className="text-red-500">{errors.releaseNumber.message}</div>
+            )}
           </fieldset>
         );
       default:
         return null;
     }
   };
+
+  const type = register("type", { required: "required" });
 
   return (
     <Dialog.Root>
@@ -80,10 +102,12 @@ const AddNotificationDialog = () => {
                   Type
                 </label>
                 <NotificationTypeSelect
-                  {...register("type")}
-                  type={selectedValue}
+                  value={selectedValue}
                   onChange={onChangeCallback}
                 />
+                {errors.type && (
+                  <div className="text-red-500">{errors.type.message}</div>
+                )}
               </fieldset>
               <Item type={selectedValue} />
               <div

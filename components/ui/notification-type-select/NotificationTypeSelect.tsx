@@ -4,17 +4,17 @@ import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 type Props = {
-  type: string;
+  value: string;
   onChange: (change: string) => void;
 };
 
-export const NotificationTypeSelect = ({ type, onChange }: Props) => {
+export const NotificationTypeSelect = ({ value, onChange }: Props) => {
   const selectChange = (value: string) => {
     onChange(value);
   };
 
   return (
-    <Select.Root value={type} onValueChange={selectChange}>
+    <Select.Root value={value} onValueChange={selectChange}>
       <Select.Trigger className="SelectTrigger" aria-label="type">
         <Select.Value placeholder="Select a notification type" />
         <Select.Icon className="SelectIcon">
