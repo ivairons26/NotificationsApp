@@ -6,6 +6,7 @@ import "./styles.css";
 import { trpc } from "@/server/client";
 import AddNotificationDialog from "../add-notification-dialog/AddNotificationDialog";
 import NotificationUpdate from "../notification-update/NotificationUpdate";
+import UserAvatar from "../avatar/Avatar";
 
 function NotificationPannel() {
   const getNotifications = trpc.notification.getNotifications.useQuery();
@@ -44,6 +45,7 @@ function NotificationPannel() {
       <Popover.Portal>
         <Popover.Content className="PopoverContent" sideOffset={5}>
           <div>Notifications</div>
+          <AddNotificationDialog />
           <ul>
             {getNotifications.data?.map((notification) => (
               <li
@@ -53,6 +55,7 @@ function NotificationPannel() {
                 }}
                 key={notification.id}
               >
+                <UserAvatar name={"TODO don't hardcode"} id={1} />
                 {notification.type === "update" && <NotificationUpdate />}
                 {notification.type !== "update" && (
                   <div>{notification.type}</div>
@@ -60,7 +63,6 @@ function NotificationPannel() {
               </li>
             ))}
           </ul>
-          <AddNotificationDialog />
           <Popover.Close className="PopoverClose" aria-label="Close">
             <Cross2Icon />
           </Popover.Close>
