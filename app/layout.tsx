@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Provider from "@/components/Provider";
 import NotificationPannel from "@/components/ui/notification-pannel/NotificationPannel";
+import UserContextProvider from "./contexts/userlContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,8 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Provider>
-          <NotificationPannel></NotificationPannel>
-          {children}
+          <UserContextProvider>
+            <NotificationPannel></NotificationPannel>
+            {children}
+          </UserContextProvider>
         </Provider>
       </body>
     </html>

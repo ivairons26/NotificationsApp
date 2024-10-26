@@ -19,9 +19,5 @@ model Notification {
   seen  Boolean
   createdAt DateTime @default(now())
   releaseNumber Int?
-}
-
-model User {
-  id    Int     @id @default(autoincrement())
-  name  String
+  userID Int?
 }

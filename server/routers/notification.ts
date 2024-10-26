@@ -15,6 +15,7 @@ const notificationSchema = z.object({
   type: notificationTypeSchema,
   seen: z.boolean(),
   releaseNumber: z.number().optional(),
+  userID: z.number().optional(),
 });
 
 const patchNotificationSchema = z.object({
@@ -49,6 +50,7 @@ const addNotification = procedure
         type: input.type,
         seen: input.seen,
         releaseNumber: input.releaseNumber,
+        userID: input.userID,
       },
     });
   });

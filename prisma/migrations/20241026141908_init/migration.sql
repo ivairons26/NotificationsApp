@@ -5,6 +5,7 @@ CREATE TABLE "Notification" (
     "seen" BOOLEAN NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "releaseNumber" INTEGER,
+    "userID" INTEGER,
 
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
