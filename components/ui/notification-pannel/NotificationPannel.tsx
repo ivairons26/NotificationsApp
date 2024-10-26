@@ -8,6 +8,7 @@ import AddNotificationDialog from "../add-notification-dialog/AddNotificationDia
 import NotificationUpdate from "../notification-update/NotificationUpdate";
 import UserAvatar from "../user-avatar/UserAvatar";
 import { UserContext } from "@/app/contexts/userlContext";
+import Link from "next/link";
 
 function NotificationPannel() {
   const users = useContext(UserContext);
@@ -37,6 +38,37 @@ function NotificationPannel() {
     });
   };
 
+  const NotificationContent = ({
+    type,
+    userName,
+  }: {
+    type: string;
+    userName: string | undefined;
+  }) => {
+    switch (type) {
+      case "update":
+        return <NotificationUpdate />;
+      case "comment":
+        return (
+          <Link href="/comments">
+            <span>{userName} tagged you in a comment</span>
+          </Link>
+        );
+      case "chat":
+        return (
+          <Link href="/chats">
+            <span>{userName} shared a chat with you</span>
+          </Link>
+        );
+      case "workspace":
+        return (
+          <Link href="/workspace">
+            <span>{userName} joined your workspace</span>
+          </Link>
+        );
+    }
+  };
+
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -47,8 +79,10 @@ function NotificationPannel() {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content className="PopoverContent" sideOffset={5}>
-          <div>Notifications</div>
-          <AddNotificationDialog />
+          <div className="flex items-center p-4">
+            <div className="mr-2.5 p-0.5 font-semibold">Notifications</div>
+            <AddNotificationDialog />
+          </div>
           <ul>
             {getNotifications.data?.map((notification) => (
               <li
@@ -58,15 +92,23 @@ function NotificationPannel() {
                 }}
                 key={notification.id}
               >
-                <UserAvatar
-                  user={
-                    users?.[notification.userID ? notification.userID - 1 : -1]
-                  }
-                />
-                {notification.type === "update" && <NotificationUpdate />}
-                {notification.type !== "update" && (
-                  <div>{notification.type}</div>
-                )}
+                <div className="flex p-2.5">
+                  <UserAvatar
+                    user={
+                      users?.[
+                        notification.userID ? notification.userID - 1 : -1
+                      ]
+                    }
+                  />
+                  <NotificationContent
+                    type={notification.type}
+                    userName={
+                      users?.[
+                        notification.userID ? notification.userID - 1 : -1
+                      ]?.name
+                    }
+                  ></NotificationContent>
+                </div>
               </li>
             ))}
           </ul>

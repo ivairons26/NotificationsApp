@@ -11,7 +11,6 @@ input {
 
 .PopoverContent {
   border-radius: 4px;
-  padding: 20px 0;
   width: 260px;
   background-color: white;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
@@ -19,6 +18,8 @@ input {
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
+  max-height: 30rem;
+  overflow: scroll;
 }
 .PopoverContent:focus {
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
