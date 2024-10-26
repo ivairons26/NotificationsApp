@@ -2,14 +2,15 @@ import * as Select from "@radix-ui/react-select";
 import "./styles.css";
 import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import React from "react";
+import { NotificationTypeModel } from "@/server/routers/notification";
 
 type Props = {
   value: string;
-  onChange: (change: string) => void;
+  onChange: (change: NotificationTypeModel) => void;
 };
 
 export const NotificationTypeSelect = ({ value, onChange }: Props) => {
-  const selectChange = (value: string) => {
+  const selectChange = (value: NotificationTypeModel) => {
     onChange(value);
   };
 

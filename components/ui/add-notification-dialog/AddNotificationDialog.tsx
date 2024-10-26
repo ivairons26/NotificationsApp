@@ -5,35 +5,59 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import "./styles.css";
 import NotificationTypeSelect from "../notification-type-select/NotificationTypeSelect";
 import { trpc } from "@/server/client";
+import { NotificationTypeModel } from "@/server/routers/notification";
 
 export type FormFields = {
-  type: string;
+  type: NotificationTypeModel;
   name?: string;
   releaseNumber?: number;
 };
 
 const AddNotificationDialog = () => {
-  const [selectedValue, setSelectedValue] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>(""); // TODO check if we can omit this and use react hook form
 
   const {
     register,
     handleSubmit,
     setValue,
+    setError,
+    reset,
     formState: { errors },
-  } = useForm<FormFields>();
+  } = useForm<FormFields>(); // TODO use zod
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     // TODO add notification to the DB with all properties
-    addNotification.mutate({ type: data.type });
+    const notificationDbModel: {
+      type: NotificationTypeModel;
+      seen: boolean;
+      releaseNumber?: number;
+    } = {
+      type: data.type,
+      seen: false,
+    };
+
+    if (data.releaseNumber) {
+      notificationDbModel.releaseNumber = +data.releaseNumber;
+    }
+
+    addNotification.mutate(notificationDbModel);
   };
 
-  const onChangeCallback = (change: string) => {
-    setSelectedValue(change);
-    setValue(type.name, change);
+  const type = register("type", { required: "required" });
+
+  const onTypeChangeCallback = (change: NotificationTypeModel) => {
+    setSelectedType(change);
+    setValue(type.name, change, { shouldValidate: true });
   };
 
   const addNotification = trpc.notification.addNotification.useMutation({
-    onSettled: () => {
-      // TODO add notification to the top of the pannel
+    onSuccess: () => {
+      onOpenChange(false);
+    },
+    onError: (err) => {
+      console.error(err);
+      setError("root", {
+        message: "Something happened. Notification wasn't saved.",
+      });
     },
   });
 
@@ -68,7 +92,7 @@ const AddNotificationDialog = () => {
               {...register("releaseNumber", { required: "required" })}
               type="number"
               className="Input"
-              id="releasenumber"
+              id="releaseNumber"
             />
             {errors.releaseNumber && (
               <div className="text-red-500">{errors.releaseNumber.message}</div>
@@ -80,10 +104,18 @@ const AddNotificationDialog = () => {
     }
   };
 
-  const type = register("type", { required: "required" });
+  const [open, setOpen] = useState(false);
+
+  const onOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen);
+    if (!isOpen) {
+      setSelectedType("");
+      reset();
+    }
+  };
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Trigger asChild>
         <button className="Button violet">Add</button>
       </Dialog.Trigger>
@@ -102,14 +134,17 @@ const AddNotificationDialog = () => {
                   Type
                 </label>
                 <NotificationTypeSelect
-                  value={selectedValue}
-                  onChange={onChangeCallback}
+                  value={selectedType}
+                  onChange={onTypeChangeCallback}
                 />
                 {errors.type && (
                   <div className="text-red-500">{errors.type.message}</div>
                 )}
               </fieldset>
-              <Item type={selectedValue} />
+              <Item type={selectedType} />
+              {errors.root && (
+                <div className="text-red-500">{errors.root.message}</div>
+              )}
               <div
                 style={{
                   display: "flex",
@@ -117,11 +152,13 @@ const AddNotificationDialog = () => {
                   justifyContent: "flex-end",
                 }}
               >
-                {/* <Dialog.Close asChild> */}
-                <button type="submit" className="Button green">
-                  Save changes
+                <button
+                  disabled={addNotification.isPending}
+                  type="submit"
+                  className="Button green"
+                >
+                  {addNotification.isPending ? "Loading" : "Save changes"}
                 </button>
-                {/* </Dialog.Close> */}
               </div>
             </form>
             <Dialog.Close asChild>

@@ -16,4 +16,12 @@ datasource db {
 model Notification {
   id    Int     @id @default(autoincrement())
   type  String
+  seen  Boolean
+  createdAt DateTime @default(now())
+  releaseNumber Int?
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  name  String
 }

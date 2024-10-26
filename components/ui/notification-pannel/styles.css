@@ -11,7 +11,7 @@ input {
 
 .PopoverContent {
   border-radius: 4px;
-  padding: 20px;
+  padding: 20px 0;
   width: 260px;
   background-color: white;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
