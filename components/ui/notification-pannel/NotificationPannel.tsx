@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { BellIcon, Cross2Icon } from "@radix-ui/react-icons";
 import "./styles.css";
@@ -20,8 +20,17 @@ function NotificationPannel() {
     0
   );
 
-  const markNotificationAsRead = () => {
-    console.log("markNotificationAsRead");
+  const notification = trpc.notification.patchNotification.useMutation({
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const markNotificationAsRead = (notificationId: number) => {
+    notification.mutate({
+      id: notificationId,
+      seen: true,
+    });
   };
 
   return (
@@ -37,7 +46,13 @@ function NotificationPannel() {
           <div>Notifications</div>
           <ul>
             {getNotifications.data?.map((notification) => (
-              <li onClick={markNotificationAsRead} key={notification.id}>
+              <li
+                onClick={() => {
+                  if (!notification.seen)
+                    markNotificationAsRead(notification.id);
+                }}
+                key={notification.id}
+              >
                 {notification.type === "update" && <NotificationUpdate />}
                 {notification.type !== "update" && (
                   <div>{notification.type}</div>
