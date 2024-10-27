@@ -2,7 +2,7 @@ import React from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import "./styles.css";
 import { GearIcon } from "@radix-ui/react-icons";
-import { User } from "@/app/contexts/userlContext";
+import { User } from "@/app/contexts/userContext";
 
 type Props = {
   user?: User;

@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Provider from "@/components/Provider";
 import NotificationPannel from "@/components/ui/notification-pannel/NotificationPannel";
-import UserContextProvider from "./contexts/userlContext";
+import UserContextProvider from "./contexts/userContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

@@ -2,7 +2,7 @@ import * as Select from "@radix-ui/react-select";
 import "./styles.css";
 import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 import React, { useContext } from "react";
-import { UserContext } from "@/app/contexts/userlContext";
+import { UserContext } from "@/app/contexts/userContext";
 import { RefCallBack } from "react-hook-form";
 
 type Props = {

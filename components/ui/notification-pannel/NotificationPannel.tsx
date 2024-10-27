@@ -7,7 +7,7 @@ import { trpc } from "@/server/client";
 import AddNotificationDialog from "../add-notification-dialog/AddNotificationDialog";
 import NotificationUpdate from "../notification-update/NotificationUpdate";
 import UserAvatar from "../user-avatar/UserAvatar";
-import { UserContext } from "@/app/contexts/userlContext";
+import { UserContext } from "@/app/contexts/userContext";
 import Link from "next/link";
 
 const colorCoding: { [key: string]: string } = {
