@@ -4,6 +4,8 @@ import "./globals.css";
 import Provider from "@/components/Provider";
 import NotificationPannel from "@/components/ui/notification-pannel/NotificationPannel";
 import UserContextProvider from "./contexts/userContext";
+import { HomeIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +35,12 @@ export default function RootLayout({
       >
         <Provider>
           <UserContextProvider>
-            <NotificationPannel></NotificationPannel>
+            <div className="flex justify-between absolute w-20 right-52 top-14 bg-white p-2 rounded-2xl shadow-md">
+              <Link href="/">
+                <HomeIcon />
+              </Link>
+              <NotificationPannel></NotificationPannel>
+            </div>
             {children}
           </UserContextProvider>
         </Provider>

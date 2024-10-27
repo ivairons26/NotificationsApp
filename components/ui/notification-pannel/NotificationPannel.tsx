@@ -60,7 +60,7 @@ function NotificationPannel() {
 
   return (
     <Popover.Root>
-      <Popover.Trigger className="flex absolute right-52 top-14 bg-white p-2 rounded-2xl shadow-md">
+      <Popover.Trigger className="flex">
         <BellIcon />
         {unreadNotifications > 0 && (
           <div className="flex items-center justify-center rounded-lg py-0.3 px-1.5 bg-red-500 text-white text-xs">
