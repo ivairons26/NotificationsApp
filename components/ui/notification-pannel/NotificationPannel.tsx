@@ -32,8 +32,6 @@ function NotificationPannel() {
     0
   );
 
-  console.log("unread", unreadNotifications);
-
   const notification = trpc.notification.patchNotification.useMutation({
     onError: (err) => {
       console.error(err);
@@ -63,7 +61,8 @@ function NotificationPannel() {
             <div className="mr-2.5 p-0.5 font-semibold">Notifications</div>
             <AddNotificationDialog />
             <button
-              className="cursor-pointer p-2.5 rounded hover:bg-neutral-100 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
+              onClick={() => getNotifications.refetch()}
+              className="cursor-pointer p-2.5 rounded hover:bg-neutral-100 focus:outline-none focus:ring focus:ring-violet-600"
               aria-label="Reload"
             >
               <ReloadIcon />

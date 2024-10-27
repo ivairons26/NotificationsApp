@@ -1,4 +1,4 @@
-import { boolean, z } from "zod";
+import { z } from "zod";
 import { procedure, router } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 
@@ -37,7 +37,7 @@ const patchNotification = procedure
     });
   });
 
-const getNotifications = procedure.query(async () => {
+export const getNotifications = procedure.query(async () => {
   return await prisma.notification.findMany({
     orderBy: {
       createdAt: "desc",

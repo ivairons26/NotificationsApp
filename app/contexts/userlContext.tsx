@@ -17,7 +17,7 @@ const fakeUsers: User[] = [
   },
   {
     id: 4,
-    name: "Romaguera-Jacobson",
+    name: "Romaguera-Jacob",
     avatar: "https://i.pravatar.cc/150?img=6",
   },
   { id: 5, name: "Patricia Lebsack" },
