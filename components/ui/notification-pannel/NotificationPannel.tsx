@@ -15,6 +15,8 @@ const colorCoding: { [key: string]: string } = {
   chat: "bg-blue-500",
   comment: "bg-green-500",
   workspace: "bg-yellow-500",
+  unread: "bg-blue-100",
+  read: "bg-white",
 };
 
 function NotificationPannel() {
@@ -47,7 +49,7 @@ function NotificationPannel() {
 
   return (
     <Popover.Root>
-      <Popover.Trigger className="flex absolute right-52 top-14">
+      <Popover.Trigger className="flex absolute right-52 top-14 bg-white p-2 rounded-2xl shadow-md">
         <BellIcon />
         {unreadNotifications && (
           <div className="flex items-center justify-center rounded-lg py-0.3 px-1.5 bg-red-500 text-white text-xs">
@@ -62,7 +64,7 @@ function NotificationPannel() {
             <AddNotificationDialog />
             <button
               onClick={() => getNotifications.refetch()}
-              className="cursor-pointer p-2.5 rounded hover:bg-neutral-100 focus:outline-none focus:ring focus:ring-violet-600"
+              className="cursor-pointer p-2.5 ml-1 rounded hover:bg-neutral-100 focus:outline-none focus:ring focus:ring-violet-600"
               aria-label="Reload"
             >
               <ReloadIcon />
@@ -77,7 +79,12 @@ function NotificationPannel() {
                 }}
                 key={notification.id}
               >
-                <div className="flex items-center p-2.5 border-b border-violet-700">
+                <div
+                  className={
+                    "flex items-center p-2.5 border-b border-violet-700 " +
+                    colorCoding[notification.seen ? "read" : "unread"]
+                  }
+                >
                   <span
                     className={
                       "rounded-full w-2.5 h-2.5 mr-1 " +
