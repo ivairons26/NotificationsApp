@@ -9,7 +9,7 @@ type Props = UseFormRegisterReturn<string> & {
   value: number | undefined;
 };
 
-export const UserSelect = forwardRef<HTMLButtonElement, Props>(
+const UserSelect = forwardRef<HTMLButtonElement, Props>(
   ({ value, name, onChange, onBlur }, ref) => {
     const users = useContext(UserContext);
 
@@ -58,5 +58,7 @@ export const UserSelect = forwardRef<HTMLButtonElement, Props>(
     );
   }
 );
+
+UserSelect.displayName = "UserSelect";
 
 export default UserSelect;

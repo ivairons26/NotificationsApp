@@ -9,7 +9,7 @@ type Props = UseFormRegisterReturn<string> & {
   value: NotificationTypeModel | undefined;
 };
 
-export const NotificationTypeSelect = forwardRef<HTMLButtonElement, Props>(
+const NotificationTypeSelect = forwardRef<HTMLButtonElement, Props>(
   ({ value, name, onChange, onBlur }, ref) => {
     return (
       <Select.Root
@@ -67,4 +67,5 @@ export const NotificationTypeSelect = forwardRef<HTMLButtonElement, Props>(
   }
 );
 
+NotificationTypeSelect.displayName = "NotificationTypeSelect";
 export default NotificationTypeSelect;
