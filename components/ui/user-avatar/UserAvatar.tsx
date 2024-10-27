@@ -10,7 +10,7 @@ type Props = {
 
 const UserAvatar = (props: Props) => (
   <div style={{ display: "flex", gap: 20 }}>
-    <Avatar.Root className="AvatarRoot">
+    <Avatar.Root className="AvatarRoot mr-2.5">
       <Avatar.Image
         className="AvatarImage"
         src={props.user?.avatar}

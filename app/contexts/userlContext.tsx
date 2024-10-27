@@ -24,7 +24,7 @@ const fakeUsers: User[] = [
   { id: 6, name: "Chelsey Dietrich" },
   { id: 7, name: "Keebler LLC", avatar: "https://i.pravatar.cc/150?img=7" },
   { id: 8, name: "Kurtis Weissnat", avatar: "https://i.pravatar.cc/150?img=8" },
-  { id: 9, name: "Nicholas Runolfsdottir" },
+  { id: 9, name: "Nicholas Runolfstir" },
 ];
 
 export const UserContext = createContext<User[] | undefined>(undefined);

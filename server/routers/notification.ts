@@ -38,7 +38,11 @@ const patchNotification = procedure
   });
 
 const getNotifications = procedure.query(async () => {
-  return await prisma.notification.findMany();
+  return await prisma.notification.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 });
 
 const addNotification = procedure
