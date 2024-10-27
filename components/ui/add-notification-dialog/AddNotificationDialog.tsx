@@ -5,8 +5,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import "./styles.css";
 import NotificationTypeSelect from "../notification-type-select/NotificationTypeSelect";
 import { trpc } from "@/server/client";
-import { NotificationTypeModel } from "@/server/routers/notification";
 import UserSelect from "../user-select/UserSelect";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  NotificationModel,
+  NotificationSchema,
+  NotificationTypeModel,
+} from "@/types";
 
 export type FormFields = {
   type: NotificationTypeModel;
@@ -15,50 +20,33 @@ export type FormFields = {
 };
 
 const AddNotificationDialog = () => {
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<string>("");
-
   const {
     register,
     handleSubmit,
-    setValue,
     setError,
     reset,
+    resetField,
+    watch,
     formState: { errors },
-  } = useForm<FormFields>(); // TODO use zod
+  } = useForm<FormFields>({
+    resolver: zodResolver(NotificationSchema),
+  });
+
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    const notificationDbModel: {
-      type: NotificationTypeModel;
-      seen: boolean;
-      releaseNumber?: number;
-      userID?: number;
-    } = {
-      type: data.type,
-      seen: false,
-    };
-
-    if (data.releaseNumber) {
-      notificationDbModel.releaseNumber = +data.releaseNumber;
+    let notification: NotificationModel;
+    if (data.type === "update") {
+      notification = {
+        type: "update",
+        releaseNumber: data.releaseNumber as number,
+      };
+    } else {
+      notification = { type: data.type, userID: data.userID as number };
     }
-
-    if (data.userID) {
-      notificationDbModel.userID = data.userID;
-    }
-
-    addNotification.mutate(notificationDbModel);
+    addNotification.mutate(notification);
   };
 
-  const type = register("type", { required: "required" });
-
-  const onTypeChangeCallback = (change: NotificationTypeModel) => {
-    setSelectedType(change);
-    setValue(type.name, change, { shouldValidate: true });
-  };
-
-  const onUserChangeCallback = (change: string) => {
-    setSelectedUser(change);
-    setValue("userID", +change, { shouldValidate: true });
-  };
+  const selectedType = watch("type");
+  const selectedUser = watch("userID");
 
   const addNotification = trpc.notification.addNotification.useMutation({
     onSuccess: () => {
@@ -74,41 +62,40 @@ const AddNotificationDialog = () => {
 
   const Item = ({ type }: { type: string }) => {
     switch (type) {
-      case "update":
-        return (
-          <fieldset className="Fieldset">
-            <label className="Label" htmlFor="releasenumber">
-              Release number
-            </label>
-            <input
-              {...register("releaseNumber", { required: "required" })}
-              type="number"
-              className="Input"
-              id="releaseNumber"
-            />
-            {errors.releaseNumber && (
-              <div className="text-red-500">{errors.releaseNumber.message}</div>
-            )}
-          </fieldset>
-        );
       case "chat":
       case "comment":
       case "workspace":
         return (
-          <fieldset className="Fieldset">
-            <label className="Label" htmlFor="userID">
-              Name
-            </label>
-            <UserSelect
-              value={selectedUser}
-              onUserChange={onUserChangeCallback}
-              {...register("userID", { required: "required" })}
-            />
-
+          <>
+            <fieldset className="Fieldset">
+              <label className="Label" htmlFor="userID">
+                User
+              </label>
+              <UserSelect {...register("userID")} value={selectedUser} />
+            </fieldset>
             {errors.userID && (
               <div className="text-red-500">{errors.userID.message}</div>
             )}
-          </fieldset>
+          </>
+        );
+      case "update":
+        return (
+          <>
+            <fieldset className="Fieldset">
+              <label className="Label" htmlFor="releaseNumber">
+                Release number
+              </label>
+              <input
+                {...register("releaseNumber", { valueAsNumber: true })}
+                type="number"
+                className="Input"
+                id="releaseNumber"
+              />
+            </fieldset>
+            {errors.releaseNumber && (
+              <div className="text-red-500">{errors.releaseNumber.message}</div>
+            )}
+          </>
         );
       default:
         return null;
@@ -120,8 +107,6 @@ const AddNotificationDialog = () => {
   const onOpenChange = (isOpen: boolean) => {
     setOpen(isOpen);
     if (!isOpen) {
-      setSelectedType("");
-      setSelectedUser("");
       reset();
     }
   };
@@ -146,13 +131,18 @@ const AddNotificationDialog = () => {
                   Type
                 </label>
                 <NotificationTypeSelect
+                  {...register("type", {
+                    onChange: () => {
+                      resetField("releaseNumber");
+                      resetField("userID");
+                    },
+                  })}
                   value={selectedType}
-                  onChange={onTypeChangeCallback}
                 />
-                {errors.type && (
-                  <div className="text-red-500">{errors.type.message}</div>
-                )}
               </fieldset>
+              {errors.type && (
+                <div className="text-red-500">{errors.type.message}</div>
+              )}
               <Item type={selectedType} />
               {errors.root && (
                 <div className="text-red-500">{errors.root.message}</div>
