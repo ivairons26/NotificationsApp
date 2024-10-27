@@ -75,7 +75,7 @@ function NotificationPannel() {
             <AddNotificationDialog />
             <button
               onClick={() => refetch()}
-              className="cursor-pointer p-2.5 ml-1 rounded hover:bg-neutral-100 focus:outline-none focus:ring focus:ring-violet-600"
+              className="cursor-pointer p-2.5 ml-1 rounded hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-violet-600"
               aria-label="Reload"
             >
               <ReloadIcon />

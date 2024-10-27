@@ -5,7 +5,7 @@ import "./styles.css";
 const NotificationUpdate = () => (
   <AlertDialog.Root>
     <AlertDialog.Trigger asChild>
-      <div>New features - see what’s new</div>
+      <div tabIndex={0}>New features - see what’s new</div>
     </AlertDialog.Trigger>
     <AlertDialog.Portal>
       <AlertDialog.Overlay className="AlertDialogOverlay" />
