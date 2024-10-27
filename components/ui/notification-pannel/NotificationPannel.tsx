@@ -22,9 +22,15 @@ const colorCoding: { [key: string]: string } = {
 function NotificationPannel() {
   const users = useContext(UserContext);
 
-  const getNotifications = trpc.notification.getNotifications.useQuery();
+  const { data, refetch, isError, error } =
+    trpc.notification.getNotifications.useQuery();
+
+  if (isError) {
+    console.error(error);
+  }
+
   const unreadNotifications =
-    getNotifications.data?.reduce((count, notification) => {
+    data?.reduce((count, notification) => {
       if (notification.seen === false) {
         count++;
       }
@@ -33,6 +39,7 @@ function NotificationPannel() {
     }, 0) || 0;
 
   const notification = trpc.notification.patchNotification.useMutation({
+    onSettled: () => refetch(),
     onError: (err) => {
       console.error(err);
     },
@@ -61,7 +68,7 @@ function NotificationPannel() {
             <div className="mr-2.5 p-0.5 font-semibold">Notifications</div>
             <AddNotificationDialog />
             <button
-              onClick={() => getNotifications.refetch()}
+              onClick={() => refetch()}
               className="cursor-pointer p-2.5 ml-1 rounded hover:bg-neutral-100 focus:outline-none focus:ring focus:ring-violet-600"
               aria-label="Reload"
             >
@@ -69,7 +76,7 @@ function NotificationPannel() {
             </button>
           </div>
           <ul>
-            {getNotifications.data?.map((notification) => (
+            {data?.map((notification) => (
               <li
                 onClick={() => {
                   if (!notification.seen)
