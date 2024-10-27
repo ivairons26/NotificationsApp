@@ -24,7 +24,7 @@ button {
   background-color: var(--mauve-3);
 }
 .SelectTrigger:focus {
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 2px var(--violet-11);
 }
 .SelectTrigger[data-placeholder] {
   color: var(--violet-9);
