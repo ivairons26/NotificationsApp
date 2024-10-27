@@ -1,7 +1,13 @@
 "use client";
 import React, { useContext } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { BellIcon, Cross2Icon, ReloadIcon } from "@radix-ui/react-icons";
+import {
+  BellIcon,
+  Cross2Icon,
+  EyeClosedIcon,
+  EyeOpenIcon,
+  ReloadIcon,
+} from "@radix-ui/react-icons";
 import "./styles.css";
 import { trpc } from "@/server/client";
 import AddNotificationDialog from "../add-notification-dialog/AddNotificationDialog";
@@ -45,10 +51,10 @@ function NotificationPannel() {
     },
   });
 
-  const markNotificationAsRead = (notificationId: number) => {
+  const markNotificationAsSeen = (notificationId: number, seen: boolean) => {
     notification.mutate({
       id: notificationId,
-      seen: true,
+      seen: seen,
     });
   };
 
@@ -80,7 +86,7 @@ function NotificationPannel() {
               <li
                 onClick={() => {
                   if (!notification.seen)
-                    markNotificationAsRead(notification.id);
+                    markNotificationAsSeen(notification.id, true);
                 }}
                 key={notification.id}
               >
@@ -112,6 +118,15 @@ function NotificationPannel() {
                       ]?.name
                     }
                   ></NotificationContent>
+                  {notification.seen && (
+                    <EyeClosedIcon
+                      onClick={() =>
+                        markNotificationAsSeen(notification.id, false)
+                      }
+                      className="cursor-pointer ml-10"
+                    />
+                  )}
+                  {!notification.seen && <EyeOpenIcon className="ml-10" />}
                 </div>
               </li>
             ))}
