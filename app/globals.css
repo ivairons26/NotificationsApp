@@ -24,16 +24,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-.placeholder:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 100px;
-  background: linear-gradient(90deg, #eee, #f4f4f4, #eee);
-  animation: gradient 1s infinite ease-in-out;
-}
 .image-placeholder {
   aspect-ratio: 16 / 12;
   margin-bottom: 1rem;
@@ -46,13 +36,4 @@ body {
   aspect-ratio: 16 / 1;
   margin-top: 1rem;
   margin-bottom: 0;
-}
-@keyframes gradient {
-  form {
-    left: 0%;
-  }
-
-  to {
-    left: 100%;
-  }
 }
