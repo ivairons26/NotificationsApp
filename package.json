@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "run:migrations": "prisma migrate dev --name init"
+    "run:migrations": "prisma migrate dev --name init",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -23,6 +24,7 @@
     "@trpc/client": "^11.0.0-rc.593",
     "@trpc/react-query": "^11.0.0-rc.593",
     "@trpc/server": "^11.0.0-rc.593",
+    "@vercel/postgres": "^0.10.0",
     "client-only": "^0.0.1",
     "next": "15.0.1",
     "react": "^18.3.1",
